@@ -1,5 +1,38 @@
 ---
 title: "owner-analysis"
+author: "Julek Chawarski"
 format: html
 ---
+
+# load libraries
+
+```{r, warnings = FALSE, echo = FALSE}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(here)
+```
+
+# read in the data
+
+```{r}
+lobster_abundance <- read_csv(here("data/Lobster_Abundance_All_Years_20220829.csv"))
+```
+
+# convert missing values to NA
+
+```{r}
+lobster_abundance <- lobster_abundance %>% 
+  mutate(SIZE_MM = na_if(SIZE_MM, -99999))
+
+
+```
+
+# remove observations from Naples Reef
+```{r}
+lobster_abundance <- lobster_abundance 
+```
+
+
 
