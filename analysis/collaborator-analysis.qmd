@@ -1,5 +1,32 @@
 ---
 title: "collaborator-analysis"
+author: "Danica Linda Cantarero"
 format: html
 ---
+
+## Exercise: Explore, Clean, and Wrangle Data
+
+```{r}
+#| message: false
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(here)
+```
+
+```{r}
+lobster_traps <- read_csv(here("data/Lobster_Trap_Counts_All_Years_20210519.csv"))
+
+colnames(lobster_traps)
+
+head(lobster_traps)
+
+summary(lobster_traps)
+
+unique(lobster_traps$SITE)
+
+View(lobster_traps)
+```
+
 
