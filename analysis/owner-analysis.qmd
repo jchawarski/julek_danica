@@ -31,8 +31,37 @@ lobster_abundance <- lobster_abundance %>%
 
 # remove observations from Naples Reef
 ```{r}
-lobster_abundance <- lobster_abundance 
+lobster_abundance_noNAPL <- lobster_abundance %>%
+  filter(!SITE %in% "NAPL")
 ```
 
+# create and store a subset from Arroyo Quemado and with carapace length > 70 mm
+
+```{r}
+lobster_abundance_AQUE <- lobster_abundance %>% 
+  filter(SITE %in% "AQUE") %>%
+  filter(SIZE_MM > 70)
+
+
+hist(lobster_abundance_AQUE$SIZE_MM)
+```
+
+# find max carapace length, group by site and month
+
+```{r}
+lobster_size <- lobster_abundance %>% 
+  group_by(SITE, MONTH) %>%
+  summarise(max_size = max(SIZE_MM, na.rm = T))
+```
+
+
+## Data Visualization
+
+
+```{r}
+
+lobster_size %>% ggplot(aes(x=SITE, y= max_size, fill=SITE)) + geom_col() +
+  facet_grid(~MONTH) + theme_bw() + theme(legend.position = "none")
+```
 
 
