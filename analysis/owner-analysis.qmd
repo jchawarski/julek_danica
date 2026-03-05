@@ -54,14 +54,75 @@ lobster_size <- lobster_abundance %>%
   summarise(max_size = max(SIZE_MM, na.rm = T))
 ```
 
+## Exercise: Data Visualization
 
-## Data Visualization
-
+# bar plots of maximum lobster sizes by size and month
 
 ```{r}
 
 lobster_size %>% ggplot(aes(x=SITE, y= max_size, fill=SITE)) + geom_col() +
   facet_grid(~MONTH) + theme_bw() + theme(legend.position = "none")
 ```
+
+# lobster carapace size distributions by SITE
+
+```{r}
+
+plot3 <- 
+lobster_abundance %>% ggplot(aes(x=SIZE_MM, fill=SITE)) + 
+  geom_histogram(color="black") + xlab("Size (mm)") + 
+  labs(title = "Lobster Carapace Size Distributions by Site, 2012-2022") + 
+  facet_wrap(~SITE) + theme_minimal() +  theme(legend.position = "none")
+
+ggsave(here("figs/Lobster_carapace_sizedist_site.png"), plot = plot3, height=4, width = 6, dpi=300)
+
+
+```
+
+# total count of lobsters by SITE and YEAR
+
+```{r}
+lobsters_summarize <- lobster_abundance %>% 
+  group_by(SITE, YEAR) %>%
+  summarise(sum = sum(COUNT))
+
+plot2 <- 
+lobsters_summarize %>% ggplot(aes(x=YEAR, y=sum, color=SITE, linetype = SITE)) + 
+  geom_point() + 
+  scale_x_continuous(breaks = c(2012:2022)) + 
+  geom_line() + 
+  labs(x = "Year", y = "# lobsters", title= "Total Count of Lobsters across sites and years, 2021-2022") + 
+  theme_minimal() 
+
+ggsave(here("figs/Total_lobster_count_sitexyear.png"), plot = plot2, height=3, width = 6, dpi=300)
+
+```
+
+
+# Lobster size analysis
+
+```{r}
+
+lobster_size_lrg <- lobster_abundance %>%
+  filter(YEAR %in% c(2019,2020,2021)) %>%
+  mutate(SIZE_BIN = if_else(SIZE_MM <= 70, "small", "large")) %>%
+  group_by(SITE, SIZE_BIN) %>%
+  summarise(num = sum(COUNT)) %>%
+  drop_na()
+
+cols = c("cadetblue", "chocolate3")
+
+plot1 <- 
+ggplot(data = lobster_size_lrg, aes(x = SITE, y = num, fill = SIZE_BIN)) +
+    geom_col(position = "dodge", color="black") + 
+  labs(title = "Lobster size groups by Site, all years", y= "# Lobsters") + 
+  scale_fill_manual(values = cols, labels = c("Large (>= 70 mm)", "Small (< 70 mm)"), name = "Size Groups") + 
+  theme_minimal() +
+  labs(legend.title = "Size group")
+
+ggsave(here("figs/Lobster_size_groups_plot.png"), plot = plot1, height=3, width = 5, dpi=300)
+
+```
+
 
 
