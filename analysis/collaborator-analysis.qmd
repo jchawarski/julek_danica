@@ -69,5 +69,12 @@ max_comm_traps <- lobster_traps %>%
   summarise(max_traps = max(TRAPS, na.rm = TRUE))
 ```
 
+## Exercise: Data Visualization
+
+```{r}
+ggplot(lobster_traps, aes(TRAPS)) +
+  geom_histogram() +
+  facet_wrap(~YEAR) + theme_bw()
+```
 
 
