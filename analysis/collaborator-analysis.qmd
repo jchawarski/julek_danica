@@ -24,9 +24,50 @@ head(lobster_traps)
 
 summary(lobster_traps)
 
-unique(lobster_traps$SITE)
+
 
 View(lobster_traps)
 ```
+
+
+### missing values to na
+```{r}
+# Q1
+unique(lobster_traps$TRAPS)
+
+lobster_traps <- lobster_traps %>% 
+    mutate(TRAPS = na_if(TRAPS, -99999))
+
+unique(lobster_traps$TRAPS)
+```
+
+### filter() practice
+
+
+```{r} 
+# Q2
+no_napl <- lobster_traps %>% 
+  filter(SITE != "NAPL")
+
+# View(no_napl)
+unique(no_napl$SITE)
+```
+
+```{r}
+#Q3
+traps_carp_20 <- lobster_traps %>% 
+  filter(SITE == "CARP" & TRAPS > 20)
+
+#View(traps_carp_20)
+#summary(traps_carp_20)
+
+```
+```{r}
+#Q4
+max_comm_traps <- lobster_traps %>% 
+  group_by(SITE, MONTH) %>% 
+  summarise(max_traps = max(TRAPS, na.rm = TRUE))
+```
+
 
 
